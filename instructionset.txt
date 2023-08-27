@@ -1,0 +1,37 @@
+Types:
+    MR  1 memory address, 1 register
+    RR  2 registers
+    RI  1 register, 1 immediate
+    I   1 immediate
+
+Type layout:
+            01234567 01234567
+    ALL:    xxxx                Instruction
+
+    MR:         xx              Register
+                     xxxxxxxx   Memory address
+
+    RR:         xx              First register
+                  xx            Second register
+
+    RI:         xx              Register
+                     xxxxxxxx   Immediate value
+
+    I:               xxxxxxxx   Immediate value
+
+Instructions:
+    name    type    description
+    LOAD    MR      loads value from memory to register
+    STORE   MR      stores value from register to memory
+    LDIMM   RI      loads immediate value to register
+    COPY    RR      copies value from first register to second register
+    JUMP    I       jumps to the instruction at the given memory address
+    ADD     RR      does arithmetic addition on first and second registers and stores the result in the first register
+    SUB     RR      does arithmetic subtraction on first and second registers and stores the result in the first register
+    MUL     RR      does arithmetic multiplication on first and second registers and stores the result in the first register
+    DIV     RR      does arithmetic division on first and second registers and stores the result in the first register
+    BSL     RR      bitwise shifts first register left by second register and stores the result in the first register
+    BSR     RR      bitwise shifts first register right by second register and stores the result in the first register
+    AND     RR      does a bitwise and on first and second registers and stores the result in the first register
+    OR      RR      does a bitwise or on first and second registers and stores the result in the first register
+    XOR     RR      does a bitwise exclusive or on first and second registers and stores the result in the first register

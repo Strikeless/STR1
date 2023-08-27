@@ -1,0 +1,21 @@
+Computing
+    - Addition, subtraction, multiplication and division
+    - All binary logical operators
+
+IO
+    - Low-latency and maskable interrupts, at least 2 sources
+
+Protection
+    - NOTE: Better not to worry about any of this till a working version
+    - Two privilege levels / rings
+    - Ring 1 may not:
+        * access memory
+        * access IO
+        * define syscalls
+    - Ring 0 can define syscalls, syscalls can be called from ring 1 and they should have ring 0 privileges
+    - TODO: how should interrupts be treated in ring 1?
+
+Miscellaneous
+    - Simplicity over performance
+    - Preferably a COPY instruction that is atleast as fast as loading a single byte from ROM
+        * This allows RR instructions that must not overwrite input values to be as fast as a theoretical RRR instruction
