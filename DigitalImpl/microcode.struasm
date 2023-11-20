@@ -1,0 +1,292 @@
+#output ControlLow[256]
+#output ControlHigh[256]
+#output Decision[256]
+
+/* CONTINUE */
+##define continue ControlLow[0:0]
+
+/* NEXT_FETCH_MODE */
+##define next_fetch_mode ControlLow[1:1]
+##define NFM_IMMED 0b1
+##define NFM_REGS 0b0
+
+/* PC_MODE */
+##define pc_mode ControlLow[2:3]
+##define PCM_NOP 0b00
+##define PCM_ZERO 0b01
+##define PCM_INC 0b10
+##define PCM_ALU 0b11
+
+/* ALU_MODE */
+##define alu_mode ControlLow[4:7]
+##define AM_SRCA 0b0000
+##define AM_ADD 0b0001
+##define AM_SUB 0b0010
+##define AM_MUL 0b0011
+##define AM_DIV 0b0100
+##define AM_LSL 0b0101
+##define AM_LSR 0b0110
+##define AM_AND 0b0111
+##define AM_OR 0b1000
+##define AM_XOR 0b1001
+
+/* SRC_A and SRC_B */
+##define src_a ControlHigh[0:2]
+##define src_b ControlHigh[3:4]
+##define SRC_MEM 0b000
+##define SRC_IMM 0b001
+##define SRC_RA 0b010
+##define SRC_RB 0b011
+##define SRC_PC 0b100
+
+/* DEST */
+##define dest ControlHigh[6:7]
+##define DEST_MEM 0b00
+##define DEST_MEMADDR 0b01
+##define DEST_RA 0b10
+
+##define microend() continue = 0b0 pc_mode = PCM_INC
+##define microjump-> continue = 0b1 Decision[0:7] = 
+
+/* 
+    NOTE: Active registers have always been pre-fetched on the first cycle
+        of an instruction, assuming no instruction sets next_fetch_mode to
+        pre-fetch an immediate on the last cycle of an instruction, which
+        should never be done.
+*/
+
+/* hlttint */
+0x0: {
+    /* 
+        When executed normally from program memory, this "halts" the microprocessor
+        until an interrupt is triggered, in which case the last instruction of the
+        interrupt may increment PC causing the program to continue.
+
+        When the microprocessor gets powered on, this may be the the first executed
+        instruction if the program memory has not yet provided the real first instruction.
+        In that case this instruction will be executed until the instruction is available.
+
+        This instruction should not be called from microcode, as there is no real reason
+        to do so, and it will most likely just cause problems and waste clock cycles.
+    */
+    continue = 0b0
+    pc_mode = PCM_NOP
+}
+
+/* ld.imm */
+0x1: {
+    /* On the next cycle, we need to have fetched an immediate value... */
+    next_fetch_mode = NFM_IMMED
+
+    /* ...from the next byte in program storage */
+    pc_mode = PCM_INC
+
+    microjump->255
+    255: {
+        /* Copy the immediate value... */
+        src_a = SRC_IMM
+
+        /* ...over to the active write register */
+        dest = DEST_RA
+
+        microend()
+    }
+}
+
+/* ld.mem */
+0x2: {
+    /* Set the memory address... */
+    dest = DEST_MEMADDR
+
+    /* ...to the value in register B */
+    src_a = SRC_RB
+    
+    microjump->254
+    254: {
+        /* Copy the value in memory... */
+        src_a = SRC_MEM
+
+        /* ...over to the active write register */
+        dest = DEST_RA
+
+        microend()
+    }
+}
+
+/* str */
+0x3: {
+    /* Set the memory address... */
+    dest = DEST_MEMADDR
+
+    /* ...to the value in register B */
+    src_a = SRC_RA
+
+    microjump->253
+    253: {
+        /* Copy the value in register A... */
+        src_a = SRC_RB
+
+        /* ...over to memory */
+        dest = DEST_MEM
+
+        microend()
+    }
+}
+
+/* cpy */
+0x4: {
+    /* Set register A's value... */
+    dest = DEST_RA
+
+    /* ...To the value in register B */
+    src_a = SRC_RB
+
+    microend()
+}
+
+/* add */
+0x5: {
+    /* Set register A's value... */
+    dest = DEST_RA
+
+    /* ...To register B's value... */
+    src_b = SRC_RB
+
+    /* ...added... */
+    alu_mode = AM_ADD
+
+    /* ...to register A's value */
+    src_a = SRC_RA
+
+    microend()
+}
+
+/* sub */
+0x6: {
+    /* Set register A's value... */
+    dest = DEST_RA
+
+    /* ...To register B's value... */
+    src_b = SRC_RB
+
+    /* ...subtracted... */
+    alu_mode = AM_SUB
+
+    /* ...from register A's value */
+    src_a = SRC_RA
+
+    microend()
+}
+
+/* mul */
+0x7: {
+    /* Set register A's value... */
+    dest = DEST_RA
+
+    /* ...To register B's value... */
+    src_b = SRC_RB
+
+    /* ...multiplied... */
+    alu_mode = AM_MUL
+
+    /* ...by register A's value */
+    src_a = SRC_RA
+
+    microend()
+}
+
+/* lsl */
+0x8: {
+    /* Set register A's value... */
+    dest = DEST_RA
+
+    /* ...To register A's value... */
+    src_a = SRC_RA
+
+    /* ...logically shifted left... */
+    alu_mode = AM_LSL
+
+    /* ...by register B's value */
+    src_b = SRC_RB
+
+    microend()
+}
+
+/* lsr */
+0x9: {
+    /* Set register A's value... */
+    dest = DEST_RA
+
+    /* ...To register A's value... */
+    src_a = SRC_RA
+
+    /* ...logically shifted right... */
+    alu_mode = AM_LSR
+
+    /* ...by register B's value */
+    src_b = SRC_RB
+
+    microend()
+}
+
+/* and */
+0xA: {
+    /* Set register A's value... */
+    dest = DEST_RA
+
+    /* ...To register A's value... */
+    src_a = SRC_RA
+
+    /* ...bitwise and'd... */
+    alu_mode = AM_AND
+
+    /* ...with register B's value */
+    src_b = SRC_RB
+
+    microend()
+}
+
+/* or */
+0xB: {
+    /* Set register A's value... */
+    dest = DEST_RA
+
+    /* ...To register A's value... */
+    src_a = SRC_RA
+
+    /* ...bitwise or'd... */
+    alu_mode = AM_OR
+
+    /* ...with register B's value */
+    src_b = SRC_RB
+
+    microend()
+}
+
+/* xor */
+0xC: {
+    /* Set register A's value... */
+    dest = DEST_RA
+
+    /* ...To register A's value... */
+    src_a = SRC_RA
+
+    /* ...bitwise xor'd... */
+    alu_mode = AM_XOR
+
+    /* ...with register B's value */
+    src_b = SRC_RB
+
+    microend()
+}
+
+/* jmp */
+0xD: {
+    /* Make the ALU pass register A's value... */
+    src_a = SRC_RA
+
+    /* ...and set PC to that value */
+    pc_mode = PCM_ALU
+
+    continue = 0b0
+}

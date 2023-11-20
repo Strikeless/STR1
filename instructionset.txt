@@ -1,37 +1,25 @@
-Types:
-    MR  1 memory address, 1 register
-    RR  2 registers
-    RI  1 register, 1 immediate
-    I   1 immediate
+mem[X]  R,W     value in memory at index X
+rA      R,W     value at active register A          Identical to rA, name used to specify a read intention
+rB      R       value at active register B
+immed   R       immediate value
+pc      R,W     program counter
 
-Type layout:
-            01234567 01234567
-    ALL:    xxxx                Instruction
+0x0     hlttint     while (!interrupt) ;    Loops without doing anything until an interrupt finishes
+0x1     ld.imm      rA = immed              Load immed to rA
+0x2     ld.mem      rA = mem[rB]            Load mem[rB] to rA
 
-    MR:         xx              Register
-                     xxxxxxxx   Memory address
+0x3     str         mem[rA] = rB            Store rA to mem[rB]
+0x4     cpy         rA = rB                 Copies rA to rB
 
-    RR:         xx              First register
-                  xx            Second register
+0x5     add         rA = rA + rB            Adds rB to rA
+0x6     sub         rA = rA - rB            Subtracts rB from rA
+0x7     mul         rA = rA * rB            Multiplies rA by rB
+0x8     lsl         rA = rA << rB           Logically shift rA left by rB
+0x9     lsr         rA = rA >> rB           Logically shift rA right by rB
+0xA     and         rA = rA & rB            Perform bitwise-and on rA and rB, store result in rA
+0xB     or          rA = rA | rB            Perform bitwise-or on rA and rB, store result in rA
+0xC     xor         rA = rA ^ rB            Perform bitwise-xor on rA and rB, store result in rA
 
-    RI:         xx              Register
-                     xxxxxxxx   Immediate value
-
-    I:               xxxxxxxx   Immediate value
-
-Instructions:
-    name    type    description
-    LOAD    MR      loads value from memory to register
-    STORE   MR      stores value from register to memory
-    LDIMM   RI      loads immediate value to register
-    COPY    RR      copies value from first register to second register
-    JUMP    I       jumps to the instruction at the given memory address
-    ADD     RR      does arithmetic addition on first and second registers and stores the result in the first register
-    SUB     RR      does arithmetic subtraction on first and second registers and stores the result in the first register
-    MUL     RR      does arithmetic multiplication on first and second registers and stores the result in the first register
-    DIV     RR      does arithmetic division on first and second registers and stores the result in the first register
-    BSL     RR      bitwise shifts first register left by second register and stores the result in the first register
-    BSR     RR      bitwise shifts first register right by second register and stores the result in the first register
-    AND     RR      does a bitwise and on first and second registers and stores the result in the first register
-    OR      RR      does a bitwise or on first and second registers and stores the result in the first register
-    XOR     RR      does a bitwise exclusive or on first and second registers and stores the result in the first register
+0xD     jmp         pc = rA                 Unconditionally jump to rA
+0xE
+0xF

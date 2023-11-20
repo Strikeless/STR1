@@ -10,24 +10,10 @@
     </entry>
     <entry>
       <string>Width</string>
-      <int>10</int>
+      <int>14</int>
     </entry>
   </attributes>
   <visualElements>
-    <visualElement>
-      <elementName>In</elementName>
-      <elementAttributes>
-        <entry>
-          <string>Label</string>
-          <string>Instruction</string>
-        </entry>
-        <entry>
-          <string>Bits</string>
-          <int>4</int>
-        </entry>
-      </elementAttributes>
-      <pos x="380" y="440"/>
-    </visualElement>
     <visualElement>
       <elementName>Multiplexer</elementName>
       <elementAttributes>
@@ -37,16 +23,6 @@
         </entry>
       </elementAttributes>
       <pos x="520" y="420"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Splitter</elementName>
-      <elementAttributes>
-        <entry>
-          <string>Input Splitting</string>
-          <string>4*2</string>
-        </entry>
-      </elementAttributes>
-      <pos x="440" y="420"/>
     </visualElement>
     <visualElement>
       <elementName>Register</elementName>
@@ -82,26 +58,6 @@
       <pos x="640" y="460"/>
     </visualElement>
     <visualElement>
-      <elementName>Tunnel</elementName>
-      <elementAttributes>
-        <entry>
-          <string>NetName</string>
-          <string>rise</string>
-        </entry>
-      </elementAttributes>
-      <pos x="400" y="480"/>
-    </visualElement>
-    <visualElement>
-      <elementName>In</elementName>
-      <elementAttributes>
-        <entry>
-          <string>Label</string>
-          <string>Rise</string>
-        </entry>
-      </elementAttributes>
-      <pos x="380" y="480"/>
-    </visualElement>
-    <visualElement>
       <elementName>ROM</elementName>
       <elementAttributes>
         <entry>
@@ -118,7 +74,15 @@
         </entry>
         <entry>
           <string>Data</string>
-          <data>4</data>
+          <data>ff,fe,fd</data>
+        </entry>
+        <entry>
+          <string>lastDataFile</string>
+          <file>/home/h/Projects/microassembler/output/Decision.hex</file>
+        </entry>
+        <entry>
+          <string>autoReload</string>
+          <boolean>true</boolean>
         </entry>
       </elementAttributes>
       <pos x="840" y="460"/>
@@ -145,7 +109,15 @@
         </entry>
         <entry>
           <string>Data</string>
-          <data>1</data>
+          <data>0,43,43,250*0,2,80,81</data>
+        </entry>
+        <entry>
+          <string>lastDataFile</string>
+          <file>/home/h/Projects/microassembler/output/ControlHigh.hex</file>
+        </entry>
+        <entry>
+          <string>autoReload</string>
+          <boolean>true</boolean>
         </entry>
       </elementAttributes>
       <pos x="840" y="320"/>
@@ -164,7 +136,7 @@
         </entry>
         <entry>
           <string>Output Splitting</string>
-          <string>4, 2*2</string>
+          <string>3*2,2</string>
         </entry>
       </elementAttributes>
       <pos x="960" y="340"/>
@@ -184,28 +156,18 @@
       <pos x="540" y="480"/>
     </visualElement>
     <visualElement>
-      <elementName>Const</elementName>
-      <elementAttributes>
-        <entry>
-          <string>Value</string>
-          <long>0</long>
-        </entry>
-        <entry>
-          <string>Bits</string>
-          <int>4</int>
-        </entry>
-      </elementAttributes>
-      <pos x="420" y="420"/>
-    </visualElement>
-    <visualElement>
       <elementName>Probe</elementName>
       <elementAttributes>
         <entry>
           <string>Label</string>
           <string>uOP</string>
         </entry>
+        <entry>
+          <string>intFormat</string>
+          <intFormat>bin</intFormat>
+        </entry>
       </elementAttributes>
-      <pos x="840" y="80"/>
+      <pos x="1060" y="60"/>
     </visualElement>
     <visualElement>
       <elementName>Out</elementName>
@@ -215,11 +177,27 @@
           <boolean>true</boolean>
         </entry>
         <entry>
+          <string>Description</string>
+          <string>Whether to prefetch active registersor immediate for the next cycle.
+
+A false/0 will fetch active registers at the beginning of the next cycle, 
+and a true/1 will fetch immediate at the beginning of the next cycle.
+
+This &quot;prefetching&quot; is done so that active registers are accessible at the first
+clock cycle of an instruction. This does mean that immediate values cannot 
+be used during the first cycle of an instruction, since the microcode may not
+have been decoded yet.</string>
+        </entry>
+        <entry>
           <string>Label</string>
-          <string>SetImmed</string>
+          <string>NextFetchMode</string>
+        </entry>
+        <entry>
+          <string>intFormat</string>
+          <intFormat>bin</intFormat>
         </entry>
       </elementAttributes>
-      <pos x="1020" y="220"/>
+      <pos x="1020" y="240"/>
     </visualElement>
     <visualElement>
       <elementName>ROM</elementName>
@@ -238,10 +216,18 @@
         </entry>
         <entry>
           <string>Data</string>
-          <data>1</data>
+          <data>b,1,1,251*0,8,8</data>
+        </entry>
+        <entry>
+          <string>lastDataFile</string>
+          <file>/home/h/Projects/microassembler/output/ControlLow.hex</file>
+        </entry>
+        <entry>
+          <string>autoReload</string>
+          <boolean>true</boolean>
         </entry>
       </elementAttributes>
-      <pos x="840" y="180"/>
+      <pos x="840" y="200"/>
     </visualElement>
     <visualElement>
       <elementName>Splitter</elementName>
@@ -252,10 +238,10 @@
         </entry>
         <entry>
           <string>Output Splitting</string>
-          <string>1*6, 2</string>
+          <string>1*2, 2, 4</string>
         </entry>
       </elementAttributes>
-      <pos x="960" y="200"/>
+      <pos x="960" y="220"/>
     </visualElement>
     <visualElement>
       <elementName>Tunnel</elementName>
@@ -265,7 +251,7 @@
           <string>continue</string>
         </entry>
       </elementAttributes>
-      <pos x="1060" y="200"/>
+      <pos x="1060" y="220"/>
     </visualElement>
     <visualElement>
       <elementName>Probe</elementName>
@@ -279,12 +265,12 @@
           <intFormat>bin</intFormat>
         </entry>
       </elementAttributes>
-      <pos x="1060" y="140"/>
+      <pos x="1060" y="120"/>
     </visualElement>
     <visualElement>
       <elementName>Const</elementName>
       <elementAttributes/>
-      <pos x="820" y="220"/>
+      <pos x="820" y="240"/>
     </visualElement>
     <visualElement>
       <elementName>Out</elementName>
@@ -295,28 +281,18 @@
         </entry>
         <entry>
           <string>Label</string>
-          <string>SetRegs</string>
-        </entry>
-      </elementAttributes>
-      <pos x="1020" y="240"/>
-    </visualElement>
-    <visualElement>
-      <elementName>Out</elementName>
-      <elementAttributes>
-        <entry>
-          <string>small</string>
-          <boolean>true</boolean>
-        </entry>
-        <entry>
-          <string>Label</string>
-          <string>Dest</string>
+          <string>PCMode</string>
         </entry>
         <entry>
           <string>Bits</string>
           <int>2</int>
         </entry>
+        <entry>
+          <string>intFormat</string>
+          <intFormat>bin</intFormat>
+        </entry>
       </elementAttributes>
-      <pos x="1020" y="320"/>
+      <pos x="1020" y="260"/>
     </visualElement>
     <visualElement>
       <elementName>Out</elementName>
@@ -333,8 +309,12 @@
           <string>Bits</string>
           <int>4</int>
         </entry>
+        <entry>
+          <string>intFormat</string>
+          <intFormat>bin</intFormat>
+        </entry>
       </elementAttributes>
-      <pos x="1020" y="340"/>
+      <pos x="1020" y="280"/>
     </visualElement>
     <visualElement>
       <elementName>Out</elementName>
@@ -349,10 +329,14 @@
         </entry>
         <entry>
           <string>Bits</string>
-          <int>2</int>
+          <int>3</int>
+        </entry>
+        <entry>
+          <string>intFormat</string>
+          <intFormat>bin</intFormat>
         </entry>
       </elementAttributes>
-      <pos x="1020" y="360"/>
+      <pos x="1020" y="340"/>
     </visualElement>
     <visualElement>
       <elementName>Out</elementName>
@@ -367,10 +351,94 @@
         </entry>
         <entry>
           <string>Bits</string>
+          <int>3</int>
+        </entry>
+        <entry>
+          <string>intFormat</string>
+          <intFormat>bin</intFormat>
+        </entry>
+      </elementAttributes>
+      <pos x="1020" y="360"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>Dest</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
           <int>2</int>
+        </entry>
+        <entry>
+          <string>intFormat</string>
+          <intFormat>bin</intFormat>
         </entry>
       </elementAttributes>
       <pos x="1020" y="380"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Splitter</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Input Splitting</string>
+          <string>4*2</string>
+        </entry>
+      </elementAttributes>
+      <pos x="420" y="420"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Const</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Value</string>
+          <long>0</long>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>4</int>
+        </entry>
+      </elementAttributes>
+      <pos x="400" y="440"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>Rise</string>
+        </entry>
+      </elementAttributes>
+      <pos x="340" y="380"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Tunnel</elementName>
+      <elementAttributes>
+        <entry>
+          <string>NetName</string>
+          <string>rise</string>
+        </entry>
+      </elementAttributes>
+      <pos x="360" y="380"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>Instruction</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>4</int>
+        </entry>
+      </elementAttributes>
+      <pos x="340" y="420"/>
     </visualElement>
   </visualElements>
   <wires>
@@ -383,24 +451,20 @@
       <p2 x="940" y="480"/>
     </wire>
     <wire>
-      <p1 x="380" y="480"/>
-      <p2 x="400" y="480"/>
-    </wire>
-    <wire>
       <p1 x="780" y="320"/>
       <p2 x="840" y="320"/>
     </wire>
     <wire>
-      <p1 x="980" y="320"/>
-      <p2 x="1020" y="320"/>
+      <p1 x="980" y="260"/>
+      <p2 x="1020" y="260"/>
     </wire>
     <wire>
-      <p1 x="460" y="420"/>
+      <p1 x="440" y="420"/>
       <p2 x="520" y="420"/>
     </wire>
     <wire>
-      <p1 x="420" y="420"/>
-      <p2 x="440" y="420"/>
+      <p1 x="340" y="420"/>
+      <p2 x="420" y="420"/>
     </wire>
     <wire>
       <p1 x="820" y="360"/>
@@ -411,16 +475,8 @@
       <p2 x="1020" y="360"/>
     </wire>
     <wire>
-      <p1 x="900" y="200"/>
-      <p2 x="960" y="200"/>
-    </wire>
-    <wire>
-      <p1 x="980" y="200"/>
-      <p2 x="1020" y="200"/>
-    </wire>
-    <wire>
-      <p1 x="1020" y="200"/>
-      <p2 x="1060" y="200"/>
+      <p1 x="780" y="200"/>
+      <p2 x="840" y="200"/>
     </wire>
     <wire>
       <p1 x="480" y="620"/>
@@ -443,12 +499,8 @@
       <p2 x="840" y="460"/>
     </wire>
     <wire>
-      <p1 x="1020" y="140"/>
-      <p2 x="1060" y="140"/>
-    </wire>
-    <wire>
-      <p1 x="780" y="80"/>
-      <p2 x="840" y="80"/>
+      <p1 x="820" y="240"/>
+      <p2 x="840" y="240"/>
     </wire>
     <wire>
       <p1 x="980" y="240"/>
@@ -467,28 +519,44 @@
       <p2 x="1020" y="340"/>
     </wire>
     <wire>
-      <p1 x="780" y="180"/>
-      <p2 x="840" y="180"/>
+      <p1 x="980" y="280"/>
+      <p2 x="1020" y="280"/>
     </wire>
     <wire>
-      <p1 x="380" y="440"/>
-      <p2 x="440" y="440"/>
+      <p1 x="1020" y="120"/>
+      <p2 x="1060" y="120"/>
     </wire>
     <wire>
       <p1 x="560" y="440"/>
       <p2 x="660" y="440"/>
     </wire>
     <wire>
-      <p1 x="820" y="220"/>
-      <p2 x="840" y="220"/>
+      <p1 x="400" y="440"/>
+      <p2 x="420" y="440"/>
+    </wire>
+    <wire>
+      <p1 x="780" y="60"/>
+      <p2 x="1060" y="60"/>
+    </wire>
+    <wire>
+      <p1 x="900" y="220"/>
+      <p2 x="960" y="220"/>
     </wire>
     <wire>
       <p1 x="980" y="220"/>
       <p2 x="1020" y="220"/>
     </wire>
     <wire>
+      <p1 x="1020" y="220"/>
+      <p2 x="1060" y="220"/>
+    </wire>
+    <wire>
       <p1 x="980" y="380"/>
       <p2 x="1020" y="380"/>
+    </wire>
+    <wire>
+      <p1 x="340" y="380"/>
+      <p2 x="360" y="380"/>
     </wire>
     <wire>
       <p1 x="480" y="460"/>
@@ -503,20 +571,20 @@
       <p2 x="540" y="480"/>
     </wire>
     <wire>
-      <p1 x="780" y="80"/>
-      <p2 x="780" y="180"/>
-    </wire>
-    <wire>
-      <p1 x="780" y="180"/>
-      <p2 x="780" y="320"/>
+      <p1 x="780" y="60"/>
+      <p2 x="780" y="200"/>
     </wire>
     <wire>
       <p1 x="780" y="320"/>
       <p2 x="780" y="460"/>
     </wire>
     <wire>
-      <p1 x="1020" y="140"/>
-      <p2 x="1020" y="200"/>
+      <p1 x="780" y="200"/>
+      <p2 x="780" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="1020" y="120"/>
+      <p2 x="1020" y="220"/>
     </wire>
   </wires>
   <measurementOrdering/>
