@@ -12,10 +12,10 @@
 
 /* PC_MODE */
 ##define pc_mode ControlLow[2:3]
-##define PCM_NOP 0b00
-##define PCM_ZERO 0b01
-##define PCM_INC 0b10
-##define PCM_ALU 0b11
+##define PCM_ZERO 0b00
+##define PCM_ABSALU 0b01
+##define PCM_ONE 0b10
+##define PCM_ONECARRY 0b11
 
 /* ALU_MODE */
 ##define alu_mode ControlLow[4:7]
@@ -31,21 +31,20 @@
 ##define AM_XOR 0b1001
 
 /* SRC_A and SRC_B */
-##define src_a ControlHigh[0:2]
-##define src_b ControlHigh[3:4]
-##define SRC_MEM 0b000
-##define SRC_IMM 0b001
-##define SRC_RA 0b010
-##define SRC_RB 0b011
-##define SRC_PC 0b100
+##define src_a ControlHigh[0:1]
+##define src_b ControlHigh[2:3]
+##define SRC_MEM 0b00
+##define SRC_IMM 0b01
+##define SRC_RA 0b10
+##define SRC_RB 0b11
 
 /* DEST */
-##define dest ControlHigh[6:7]
+##define dest ControlHigh[4:5]
 ##define DEST_MEM 0b00
 ##define DEST_MEMADDR 0b01
 ##define DEST_RA 0b10
 
-##define microend() continue = 0b0 pc_mode = PCM_INC
+##define microend() continue = 0b0 pc_mode = PCM_ONE
 ##define microjump-> continue = 0b1 Decision[0:7] = 
 
 /* 
@@ -70,16 +69,16 @@
         to do so, and it will most likely just cause problems and waste clock cycles.
     */
     continue = 0b0
-    pc_mode = PCM_NOP
+    pc_mode = PCM_ZERO
 }
 
 /* ld.imm */
 0x1: {
-    /* On the next cycle, we need to have fetched an immediate value... */
+    /* On the next cycle, we must have fetched an immediate value... */
     next_fetch_mode = NFM_IMMED
 
     /* ...from the next byte in program storage */
-    pc_mode = PCM_INC
+    pc_mode = PCM_ONE
 
     microjump->255
     255: {
@@ -286,7 +285,15 @@
     src_a = SRC_RA
 
     /* ...and set PC to that value */
-    pc_mode = PCM_ALU
+    pc_mode = PCM_ABSALU
+
+    continue = 0b0
+}
+
+/* skpc */
+0xE: {
+    /* Add one to PC and one more if carry flag is set */
+    pc_mode = PCM_ONECARRY
 
     continue = 0b0
 }

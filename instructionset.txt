@@ -1,10 +1,13 @@
 mem[X]  R,W     value in memory at index X
-rA      R,W     value at active register A          Identical to rA, name used to specify a read intention
+rA      R,W     value at active register A
 rB      R       value at active register B
 immed   R       immediate value
-pc      R,W     program counter
+pc      W       program counter
 
-0x0     hlttint     while (!interrupt) ;    Loops without doing anything until an interrupt finishes
+NOTE: All instructions except hlttint and jmp unconditionally increment the
+    program counter, this operation is not shown in the pseudocode.
+
+0x0     hlttint     while (true) ;          Hangs the processor
 0x1     ld.imm      rA = immed              Load immed to rA
 0x2     ld.mem      rA = mem[rB]            Load mem[rB] to rA
 
@@ -21,5 +24,5 @@ pc      R,W     program counter
 0xC     xor         rA = rA ^ rB            Perform bitwise-xor on rA and rB, store result in rA
 
 0xD     jmp         pc = rA                 Unconditionally jump to rA
-0xE
+0xE     skpc        if (carry) pc += 1      Skips the next instruction if carry flag is set
 0xF
