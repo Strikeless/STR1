@@ -10,3 +10,5 @@ ld.mem r0, r3
 ld.mem r1, r3
 ld.mem r2, r3
 ld.mem r3, r3
+
+hlttint

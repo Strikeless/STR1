@@ -17,16 +17,16 @@
 
     ld.imm {destReg: reg}, {srcImmed: immed} => instruction(0x1, destReg, 0) @ srcImmed
     ld.mem {destReg: reg}, {addrReg: reg} => instruction(0x2, destReg, addrReg)
+    ld.prg {destReg: reg}, {addrReg: reg} => instruction(0x3, destReg, addrReg)
 
-    str.reg {addrReg: reg}, {srcReg: reg} => instruction(0x3, addrReg, srcReg)
-    str.imm {addrImmed: immed}, {srcReg: reg} => instruction(0x4, 0, srcReg) @ addrImmed
+    str.reg {addrReg: reg}, {srcReg: reg} => instruction(0x4, addrReg, srcReg)
+    str.imm {addrImmed: immed}, {srcReg: reg} => instruction(0x5, 0, srcReg) @ addrImmed
 
-    cpy {destReg: reg}, {srcReg: reg} => instruction(0x5, destReg, srcReg)
+    cpy {destReg: reg}, {srcReg: reg} => instruction(0x6, destReg, srcReg)
 
-    add {a: reg}, {b: reg} => instruction(0x6, a, b)
-    sub {a: reg}, {b: reg} => instruction(0x7, a, b)
-    mul {a: reg}, {b: reg} => instruction(0x8, a, b)
-    lsr {a: reg}, {b: reg} => instruction(0x9, a, b)
+    add {a: reg}, {b: reg} => instruction(0x7, a, b)
+    sub {a: reg}, {b: reg} => instruction(0x8, a, b)
+    mul {a: reg}, {b: reg} => instruction(0x9, a, b)
     and {a: reg}, {b: reg} => instruction(0xA, a, b)
     or {a: reg}, {b: reg} => instruction(0xB, a, b)
     xor {a: reg}, {b: reg} => instruction(0xC, a, b)

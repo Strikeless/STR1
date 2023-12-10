@@ -9,3 +9,5 @@ forward_loop:
     ld.mem r0, r2
     str.reg r1, r0
     jmp.reg r3
+
+hlttint
