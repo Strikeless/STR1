@@ -1,4 +1,5 @@
 mem[X]  R,W     value in memory at index X
+prg[X]  R       Value in program memory / ROM at index X
 rA      R,W     value at active register A
 rB      R       value at active register B
 immed   R       immediate value
@@ -7,22 +8,25 @@ pc      W       program counter
 NOTE: All instructions except hlttint and jmp unconditionally increment the
     program counter, this operation is not shown in the pseudocode.
 
-0x0     hlttint     while (true) ;          Hangs the processor
-0x1     ld.imm      rA = immed              Load immed to rA
-0x2     ld.mem      rA = mem[rB]            Load mem[rB] to rA
+BUG: skpc may not be followed by an instruction that takes more than one byte
+    of program memory, for now this should be avoided manually.
 
-0x3     str         mem[rA] = rB            Store rA to mem[rB]
-0x4     cpy         rA = rB                 Copies rA to rB
+0x0 1*! hlttint     while (true) ;      Hangs the processor
+0x1 2   ld.imm      rA = immed          Load immed to rA
+0x2 2   ld.mem      rA = mem[rB]        Load mem[rB] to rA
+0x3 2   ld.prg      rA = prg[rB]        Load prg[rB] to rA
 
-0x5     add         rA = rA + rB            Adds rB to rA
-0x6     sub         rA = rA - rB            Subtracts rB from rA
-0x7     mul         rA = rA * rB            Multiplies rA by rB
-0x8     lsl         rA = rA << rB           Logically shift rA left by rB
-0x9     lsr         rA = rA >> rB           Logically shift rA right by rB
-0xA     and         rA = rA & rB            Perform bitwise-and on rA and rB, store result in rA
-0xB     or          rA = rA | rB            Perform bitwise-or on rA and rB, store result in rA
-0xC     xor         rA = rA ^ rB            Perform bitwise-xor on rA and rB, store result in rA
+0x4 2   str.reg     mem[rA] = rB        Store rA to mem[rB]
+0x5 3   str.imm     mem[immed] = rB     Store rA to mem[rB]
+0x6 1   cpy         rA = rB             Copies rA to rB
 
-0xD     jmp         pc = rA                 Unconditionally jump to rA
-0xE     skpc        if (carry) pc += 1      Skips the next instruction if carry flag is set
-0xF
+0x7 1   add         rA = rA + rB        Adds rB to rA
+0x8 1   sub         rA = rA - rB        Subtracts rB from rA
+0x9 1   mul         rA = rA * rB        Multiplies rA by rB
+0xA 1   and         rA = rA & rB        Perform bitwise-and on rA and rB, store result in rA
+0xB 1   or          rA = rA | rB        Perform bitwise-or on rA and rB, store result in rA
+0xC 1   xor         rA = rA ^ rB        Perform bitwise-xor on rA and rB, store result in rA
+
+0xD 1   jmp.reg     pc = rA             Unconditionally jump to rA
+0xE 2   jmp.imm     pc = immed          Unconditionally jump to immed
+0xF 1   skpc        if (carry) pc += 1  Skips the next instruction if carry flag is set

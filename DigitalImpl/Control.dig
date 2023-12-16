@@ -74,7 +74,7 @@
         </entry>
         <entry>
           <string>Data</string>
-          <data>0,ff,fe,fd</data>
+          <data>0,ff,fe,f9,fd,fc,8*0,fa,237*0,fb</data>
         </entry>
       </elementAttributes>
       <pos x="840" y="460"/>
@@ -101,7 +101,7 @@
         </entry>
         <entry>
           <string>Data</string>
-          <data>0,0,13,12,23,8*2e,2,239*0,3,20,21</data>
+          <data>0,0,31,71,30,0,11,6*14,0,0,80,233*0,12,2,21,32,21,13,12</data>
         </entry>
       </elementAttributes>
       <pos x="840" y="340"/>
@@ -146,10 +146,6 @@
           <string>Label</string>
           <string>uOP</string>
         </entry>
-        <entry>
-          <string>intFormat</string>
-          <intFormat>bin</intFormat>
-        </entry>
       </elementAttributes>
       <pos x="1060" y="80"/>
     </visualElement>
@@ -176,10 +172,6 @@ have been decoded yet.</string>
           <string>Label</string>
           <string>NextFetchMode</string>
         </entry>
-        <entry>
-          <string>intFormat</string>
-          <intFormat>bin</intFormat>
-        </entry>
       </elementAttributes>
       <pos x="1020" y="260"/>
     </visualElement>
@@ -200,7 +192,7 @@ have been decoded yet.</string>
         </entry>
         <entry>
           <string>Data</string>
-          <data>0,b,1,1,8,18,28,38,58,68,78,88,98,4,c,238*0,8,8,8</data>
+          <data>0,b,1,3,1,b,8,18,28,38,78,88,98,4,b,c,233*0,8,4,8,3,8,8,8</data>
         </entry>
       </elementAttributes>
       <pos x="840" y="220"/>
@@ -236,10 +228,6 @@ have been decoded yet.</string>
           <string>Label</string>
           <string>Continue uOP</string>
         </entry>
-        <entry>
-          <string>intFormat</string>
-          <intFormat>bin</intFormat>
-        </entry>
       </elementAttributes>
       <pos x="1060" y="140"/>
     </visualElement>
@@ -263,10 +251,6 @@ have been decoded yet.</string>
           <string>Bits</string>
           <int>2</int>
         </entry>
-        <entry>
-          <string>intFormat</string>
-          <intFormat>bin</intFormat>
-        </entry>
       </elementAttributes>
       <pos x="1020" y="280"/>
     </visualElement>
@@ -284,10 +268,6 @@ have been decoded yet.</string>
         <entry>
           <string>Bits</string>
           <int>4</int>
-        </entry>
-        <entry>
-          <string>intFormat</string>
-          <intFormat>bin</intFormat>
         </entry>
       </elementAttributes>
       <pos x="1020" y="300"/>
@@ -307,10 +287,6 @@ have been decoded yet.</string>
           <string>Bits</string>
           <int>2</int>
         </entry>
-        <entry>
-          <string>intFormat</string>
-          <intFormat>bin</intFormat>
-        </entry>
       </elementAttributes>
       <pos x="1020" y="360"/>
     </visualElement>
@@ -328,10 +304,6 @@ have been decoded yet.</string>
         <entry>
           <string>Bits</string>
           <int>2</int>
-        </entry>
-        <entry>
-          <string>intFormat</string>
-          <intFormat>bin</intFormat>
         </entry>
       </elementAttributes>
       <pos x="1020" y="380"/>
@@ -409,12 +381,36 @@ have been decoded yet.</string>
           <string>Bits</string>
           <int>2</int>
         </entry>
-        <entry>
-          <string>intFormat</string>
-          <intFormat>bin</intFormat>
-        </entry>
       </elementAttributes>
       <pos x="1020" y="400"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>ROMMode</string>
+        </entry>
+      </elementAttributes>
+      <pos x="1020" y="420"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>ClrCarry</string>
+        </entry>
+      </elementAttributes>
+      <pos x="1020" y="440"/>
     </visualElement>
   </visualElements>
   <wires>
@@ -433,6 +429,10 @@ have been decoded yet.</string>
     <wire>
       <p1 x="340" y="420"/>
       <p2 x="420" y="420"/>
+    </wire>
+    <wire>
+      <p1 x="980" y="420"/>
+      <p2 x="1020" y="420"/>
     </wire>
     <wire>
       <p1 x="820" y="260"/>
@@ -519,6 +519,14 @@ have been decoded yet.</string>
       <p2 x="420" y="440"/>
     </wire>
     <wire>
+      <p1 x="980" y="440"/>
+      <p2 x="1020" y="440"/>
+    </wire>
+    <wire>
+      <p1 x="780" y="220"/>
+      <p2 x="840" y="220"/>
+    </wire>
+    <wire>
       <p1 x="820" y="380"/>
       <p2 x="840" y="380"/>
     </wire>
@@ -529,10 +537,6 @@ have been decoded yet.</string>
     <wire>
       <p1 x="340" y="380"/>
       <p2 x="360" y="380"/>
-    </wire>
-    <wire>
-      <p1 x="780" y="220"/>
-      <p2 x="840" y="220"/>
     </wire>
     <wire>
       <p1 x="480" y="460"/>

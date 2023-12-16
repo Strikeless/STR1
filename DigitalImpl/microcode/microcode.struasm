@@ -33,16 +33,25 @@
 /* SRC_A and SRC_B */
 ##define src_a ControlHigh[0:1]
 ##define src_b ControlHigh[2:3]
-##define SRC_MEM 0b00
-##define SRC_IMM 0b01
-##define SRC_RA 0b10
-##define SRC_RB 0b11
+##define SRC_RA 0b00
+##define SRC_RB 0b01
+##define SRC_IMM 0b10
+##define SRC_MEM 0b11
 
 /* DEST */
 ##define dest ControlHigh[4:5]
-##define DEST_MEM 0b00
-##define DEST_MEMADDR 0b01
-##define DEST_RA 0b10
+##define DEST_VOID 0b00
+##define DEST_RA 0b01
+##define DEST_MEM 0b10
+##define DEST_MEMADDR 0b11
+
+/* ROM_MODE */
+##define rom_mode ControlHigh[6:6]
+##define ROMM_PC 0b0
+##define ROMM_MEMADDR 0b1
+
+/* CLR_CARRY */
+##define clr_carry ControlHigh[7:7]
 
 ##define microend() continue = 0b0 pc_mode = PCM_ONE
 ##define microjump-> continue = 0b1 Decision[0:7] = 
@@ -112,17 +121,43 @@
     }
 }
 
-/* str */
+/* ld.prg */
 0x3: {
     /* Set the memory address... */
     dest = DEST_MEMADDR
 
     /* ...to the value in register B */
+    src_a = SRC_RB
+
+    /* Fetch the immediate value... */
+    next_fetch_mode = NFM_IMMED
+
+    /* ...at the index of memaddr */
+    rom_mode = ROMM_MEMADDR
+    
+    microjump->249
+    249: {
+        /* Copy the just fetched value... */
+        src_a = SRC_IMM
+
+        /* ...over to the active write register */
+        dest = DEST_RA
+
+        microend()
+    }
+}
+
+/* str.reg */
+0x4: {
+    /* Set the memory address... */
+    dest = DEST_MEMADDR
+
+    /* ...to the value in register A */
     src_a = SRC_RA
 
     microjump->253
     253: {
-        /* Copy the value in register A... */
+        /* Copy the value in register B... */
         src_a = SRC_RB
 
         /* ...over to memory */
@@ -132,8 +167,40 @@
     }
 }
 
+/* str.imm */
+0x5: {
+    /* On the next cycle, we must have fetched an immediate value... */
+    next_fetch_mode = NFM_IMMED
+
+    /* ...from the next byte in program storage */
+    pc_mode = PCM_ONE
+
+    microjump->252
+    252: {
+        /* Set the memory address... */
+        dest = DEST_MEMADDR
+
+        /* ...to the immediate value we just got */
+        src_a = SRC_IMM
+
+        /* Make sure to not override the registers from the first cycle */
+        next_fetch_mode = NFM_IMMED
+
+        microjump->251
+        251: {
+            /* Copy the value in register B... */
+            src_a = SRC_RB
+
+            /* ...over to memory */
+            dest = DEST_MEM
+
+            microend()
+        }
+    }
+}
+
 /* cpy */
-0x4: {
+0x6: {
     /* Set register A's value... */
     dest = DEST_RA
 
@@ -144,7 +211,7 @@
 }
 
 /* add */
-0x5: {
+0x7: {
     /* Set register A's value... */
     dest = DEST_RA
 
@@ -161,7 +228,7 @@
 }
 
 /* sub */
-0x6: {
+0x8: {
     /* Set register A's value... */
     dest = DEST_RA
 
@@ -178,7 +245,7 @@
 }
 
 /* mul */
-0x7: {
+0x9: {
     /* Set register A's value... */
     dest = DEST_RA
 
@@ -190,40 +257,6 @@
 
     /* ...by register A's value */
     src_a = SRC_RA
-
-    microend()
-}
-
-/* lsl */
-0x8: {
-    /* Set register A's value... */
-    dest = DEST_RA
-
-    /* ...To register A's value... */
-    src_a = SRC_RA
-
-    /* ...logically shifted left... */
-    alu_mode = AM_LSL
-
-    /* ...by register B's value */
-    src_b = SRC_RB
-
-    microend()
-}
-
-/* lsr */
-0x9: {
-    /* Set register A's value... */
-    dest = DEST_RA
-
-    /* ...To register A's value... */
-    src_a = SRC_RA
-
-    /* ...logically shifted right... */
-    alu_mode = AM_LSR
-
-    /* ...by register B's value */
-    src_b = SRC_RB
 
     microend()
 }
@@ -279,21 +312,47 @@
     microend()
 }
 
-/* jmp */
+/* jmp.reg */
 0xD: {
     /* Make the ALU pass register A's value... */
     src_a = SRC_RA
 
-    /* ...and set PC to that value */
+    /* ...and set the PC to that value */
     pc_mode = PCM_ABSALU
 
     continue = 0b0
 }
 
-/* skpc */
+/* jmp.imm */
 0xE: {
+    /* On the next cycle, we must have fetched an immediate value... */
+    next_fetch_mode = NFM_IMMED
+
+    /* ...from the next byte in program storage */
+    pc_mode = PCM_ONE
+
+    microjump->250
+    250: {
+        /* Take the immediate value... */
+        src_a = SRC_IMM
+
+        /* ...and set the PC to that value */
+        pc_mode = PCM_ABSALU
+
+        /* Make sure to not mess with rA... */
+        dest = DEST_VOID
+
+        continue = 0b0
+    }
+}
+
+/* skpc */
+0xF: {
     /* Add one to PC and one more if carry flag is set */
     pc_mode = PCM_ONECARRY
+
+    /* Clear the carry flag */
+    clr_carry = 0b1
 
     continue = 0b0
 }
